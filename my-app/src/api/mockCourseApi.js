@@ -69,13 +69,13 @@ class CourseApi {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         // Simulate server-side validation
-        const minCourseTitleLength = 1;
+        const minCourseTitleLength = 2;
         if (course.title.length < minCourseTitleLength) {
           reject(`Title must be at least ${minCourseTitleLength} characters.`);
         }
 
         if (course.id) {
-          const existingCourseIndex = courses.findIndex(a => a.id == course.id);
+          const existingCourseIndex = courses.findIndex(a => a.id === course.id);
           courses.splice(existingCourseIndex, 1, course);
         } else {
           //Just simulating creation here.
@@ -95,7 +95,7 @@ class CourseApi {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const indexOfCourseToDelete = courses.findIndex(course => {
-          course.id == courseId;
+          course.id === courseId;
         });
         courses.splice(indexOfCourseToDelete, 1);
         resolve();

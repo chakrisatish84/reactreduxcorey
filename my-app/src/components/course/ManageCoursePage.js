@@ -13,15 +13,50 @@ class ManageCoursePage extends React.Component {
             course: Object.assign({}, this.props.course),
             errors: {}
         }
+
+        this.updateCourseState = this.updateCourseState.bind(this);
+        this.saveCourse = this.saveCourse.bind(this);
            
     }
-    render() { 
+    componentWillReceiveProps(nextProps){
+      if(this.props.course.id != nextProps.course.id){
+          this.setState({course:Object.assign({},nextProps.course)})
+      }
+    }
+
+    updateCourseState(event){
+        const field = event.target.name;
+        let course = Object.assign({}, this.state.course);
+        course[field] = event.target.value;
+        return this.setState({course:course});
+    }
+
+    saveCourse(event){
+      event.preventDefault();
+      if(this.props.courses.filter(course => course.title ==this.state.course.title) <1 )
+      {
+        this.props.actions.saveCourse(this.state.course);
+        this.context.router.push('/courses');
+      }
+      else{
+        let errors = Object.assign({}, this.state.errors);
+          errors.title = "this user already exists";
+          this.setState({
+              errors: errors
+          })
+      }
+    }
+
+    render() {         
         return (
             <div>
                 <CourseForm
-                  allAuthors={[]}
+                  allAuthors={this.props.authors}
                   course={this.state.course}
                   errors={this.state.errors}
+                  onChange={this.updateCourseState}
+                  onSave = {this.saveCourse}
+                  warningMessage={this.state.saveWarning}
                 />  
             </div>
           )
@@ -30,13 +65,37 @@ class ManageCoursePage extends React.Component {
 
 ManageCoursePage.propTypes = {
 //test
+};
+
+ManageCoursePage.contextTypes ={
+    router : PropTypes.object
+};
+
+function getCourseById(courses,courseId){
+  const course = courses.filter((course) => course.id == courseId);
+  if(course.length) return course[0];
+  return null;
 }
 
-function mapStateProps(state, ownProps){    
+function mapStateProps(state, ownProps){ 
+    const courseId = ownProps.params.id;
+       
     let course={id:'', watchHref:'', title:'', authorId:'', length:'', category: ''};
-    return{
-       course: course
+
+    if(courseId && state.courses.length>0){
+        course = getCourseById(state.courses, courseId);
     }
+    const authrosFormattedForDropdown = state.authors.map(author =>{
+        return{
+            value: author.id,
+            text: author.firstName +' '+author.lastName
+        };
+    });
+    return{
+       course: course,
+       authors: authrosFormattedForDropdown,
+       courses: state.courses
+    };
 }
 
 function mapDispatchToProps(dispatch){    
