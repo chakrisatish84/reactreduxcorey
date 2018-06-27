@@ -19,7 +19,7 @@ class ManageCoursePage extends React.Component {
            
     }
     componentWillReceiveProps(nextProps){
-      if(this.props.course.id != nextProps.course.id){
+      if(this.props.course.id !== nextProps.course.id){
           this.setState({course:Object.assign({},nextProps.course)})
       }
     }
@@ -33,7 +33,7 @@ class ManageCoursePage extends React.Component {
 
     saveCourse(event){
       event.preventDefault();
-      if(this.props.courses.filter(course => course.title ==this.state.course.title) <1 )
+      if(this.props.courses.filter(course => course.title === this.state.course.title) <1 )
       {
         this.props.actions.saveCourse(this.state.course);
         this.context.router.push('/courses');
@@ -72,7 +72,7 @@ ManageCoursePage.contextTypes ={
 };
 
 function getCourseById(courses,courseId){
-  const course = courses.filter((course) => course.id == courseId);
+  const course = courses.filter((course) => course.id === courseId);
   if(course.length) return course[0];
   return null;
 }

@@ -28,7 +28,6 @@ SelectInput.propTypes ={
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,    
     value: PropTypes.string,
-    error: PropTypes.string,
-    options: PropTypes.object.isRequired
+    error: PropTypes.string
 };
 export default SelectInput
