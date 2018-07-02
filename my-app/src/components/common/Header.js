@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {Link, IndexLink} from 'react-router';
 import {PropTypes} from 'prop-types'
-import LoadingDots from './LoadingDots'
+import LoadingDots from './LoadingDots';
+import {connect} from 'react-redux';
 
 const Header =({loading}) =>{
  return(
@@ -20,4 +21,11 @@ Header.propTypes ={
     loading: PropTypes.bool.isRequired
 };
 
-export default Header;
+function mapStateProps(state, ownProps){
+    return{
+      courses: state.courses
+    }
+  }
+  
+
+export default connect(mapStateProps)(Header);
